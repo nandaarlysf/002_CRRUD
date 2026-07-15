@@ -32,11 +32,12 @@ app.get('/api/biodata', async (req, res) => {
         res.status(500).json({ success: false, message: "Database Error" });
     }
 });
+
 // ==========================================
 // 2. POST - Tambah data biodata baru
 // ==========================================
 app.post('/api/biodata', async (req, res) => {
-    // Pastikan 'nama' dan 'jurusan' sesuai dengan nama kolom di tabel pgAdmin/Postgres Anda
+    // Sesuaikan nama, nim, dll dengan nama kolom di tabel biodata Anda
     const { nama, jurusan } = req.body; 
     
     try {
@@ -53,12 +54,13 @@ app.post('/api/biodata', async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 });
+
 // ==========================================
 // 3. PUT - Update data biodata
 // ==========================================
 app.put('/api/biodata/:id', async (req, res) => {
     const { id } = req.params;
-    const { nama, jurusan } = req.body; 
+    const { nama, jurusan } = req.body; // Sesuaikan dengan kolom Anda
 
     try {
         const result = await pool.query(
@@ -91,4 +93,9 @@ app.delete('/api/biodata/:id', async (req, res) => {
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
+});
+
+// Jalankan Server
+app.listen(port, () => {
+    console.log(`CIHUY BERJALAN on port ${port}.`);
 });
