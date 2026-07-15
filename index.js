@@ -53,3 +53,24 @@ app.post('/api/biodata', async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 });
+// ==========================================
+// 3. PUT - Update data biodata
+// ==========================================
+app.put('/api/biodata/:id', async (req, res) => {
+    const { id } = req.params;
+    const { nama, jurusan } = req.body; 
+
+    try {
+        const result = await pool.query(
+            'UPDATE biodata SET nama = $1, jurusan = $2 WHERE id = $3',
+            [nama, jurusan, id]
+        );
+        
+        if (result.rowCount === 0) {
+            return res.status(404).json({ success: false, message: 'Data tidak ditemukan' });
+        }
+        res.status(200).json({ success: true, message: 'Biodata berhasil diperbarui' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
