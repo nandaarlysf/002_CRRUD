@@ -32,3 +32,24 @@ app.get('/api/biodata', async (req, res) => {
         res.status(500).json({ success: false, message: "Database Error" });
     }
 });
+// ==========================================
+// 2. POST - Tambah data biodata baru
+// ==========================================
+app.post('/api/biodata', async (req, res) => {
+    // Pastikan 'nama' dan 'jurusan' sesuai dengan nama kolom di tabel pgAdmin/Postgres Anda
+    const { nama, jurusan } = req.body; 
+    
+    try {
+        const result = await pool.query(
+            'INSERT INTO biodata (nama, jurusan) VALUES ($1, $2) RETURNING *',
+            [nama, jurusan]
+        );
+        res.status(201).json({
+            success: true,
+            message: 'Biodata berhasil ditambahkan',
+            data: result.rows[0]
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
