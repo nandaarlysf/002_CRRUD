@@ -74,3 +74,21 @@ app.put('/api/biodata/:id', async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 });
+
+// ==========================================
+// 4. DELETE - Hapus data biodata
+// ==========================================
+app.delete('/api/biodata/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const result = await pool.query('DELETE FROM biodata WHERE id = $1', [id]);
+        
+        if (result.rowCount === 0) {
+            return res.status(404).json({ success: false, message: 'Data tidak ditemukan' });
+        }
+        res.status(200).json({ success: true, message: 'Biodata berhasil dihapus' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
